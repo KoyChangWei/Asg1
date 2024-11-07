@@ -1,0 +1,1 @@
+This source code is about the splashscreen, login, register screen in a flutter application. This project also connect with the phpmyadmin to deal with the access. Hope you will feel well with my source code :)
