@@ -12,4 +12,16 @@ Sign up
 After press login with google
 ![image](https://github.com/user-attachments/assets/48e0b3f9-07e9-48a9-aa9e-59bfa64e6b47)
 
+Forgot password Screen
+![image](https://github.com/user-attachments/assets/7b86dcc3-6c83-4ff6-8d83-42e370108790)
+
+After enter a valid email that consist in database
+![image](https://github.com/user-attachments/assets/bfa43909-419f-47a4-94fc-47935867bfba)
+
+After enter valid otp that get from gmail, 
+![image](https://github.com/user-attachments/assets/8ef346cc-8e21-4cf9-8ccf-3e4ec2424851)
+
+
+
+
 
