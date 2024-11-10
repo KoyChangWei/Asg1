@@ -1,6 +1,6 @@
 This source code is about the splashscreen, login, register screen in a flutter application. This project also connect with the phpmyadmin to deal with the access. Hope you will feel well with my source code :)
 
-SplashScreen
+<b>SplashScreen</b>
 ![image](https://github.com/user-attachments/assets/a2015a8b-7924-42c7-9477-534196657104)
 
 Login
