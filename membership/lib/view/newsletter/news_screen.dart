@@ -78,6 +78,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
                           keyboardType: TextInputType.text,
                           onChanged: (text) {
                             loadNewsData();
+                            setState(() {});
                           },
                           decoration: InputDecoration(
                             focusedBorder: OutlineInputBorder(
@@ -340,14 +341,12 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
 
   void loadNewsData() {
     String newsletter = newslettertxt.text;
-
     String api =
         "${Myconfig.server}/mymemberlink/load_news.php?pageno=$curpage";
     if (newsletter.isNotEmpty) {
       api += "&search=$newsletter";
     }
     http.get(Uri.parse(api)).then((response) {
-      log(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {
