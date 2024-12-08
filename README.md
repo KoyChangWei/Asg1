@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/f0c275b9-555d-4819-ba92-883c254b6d0a)# Flutter Application with PHP and phpMyAdmin Integration
+# Flutter Application with PHP and phpMyAdmin Integration
 
 This project includes a **splash screen**, login, and registration screens, integrated with Google login. It connects with a PHP backend and **phpMyAdmin** for user access management, allowing data interactions with the database.
 
