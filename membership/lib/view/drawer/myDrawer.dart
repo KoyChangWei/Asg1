@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../auth/login.dart';
 import '../homePage.dart';
 import '../newsletter/news_screen.dart';
+import '../product/product._screen.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -28,21 +29,25 @@ class MyDrawer extends StatelessWidget {
               image: DecorationImage(
                   image: AssetImage("image/drawer.jpg"), fit: BoxFit.cover)),
         ),
-         ListTile(
+        ListTile(
           title: const Text('Home Page'),
           leading: const Icon(Icons.home),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (content) => const HomePageScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (content) => const HomePageScreen()));
           },
         ),
-        Divider(),
+        const Divider(),
         ListTile(
           title: const Text('Newsletter'),
           leading: const Icon(Icons.newspaper),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (content) => const NewsLetterScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (content) => const NewsLetterScreen()));
           },
         ),
         const ListTile(
@@ -62,7 +67,12 @@ class MyDrawer extends StatelessWidget {
         ListTile(
           title: const Text('Products'),
           leading: const Icon(Icons.shopping_bag),
-          onLongPress: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (content) => const ProductScreen()));
+          },
         ),
         ListTile(
           title: const Text('Vetting'),

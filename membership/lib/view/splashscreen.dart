@@ -71,7 +71,7 @@ class _SplashscreenState extends State<Splashscreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(right: 80),
-              child: Container(
+              child: SizedBox(
                 width: 400,
                 height: 300,
                 child: Lottie.asset(

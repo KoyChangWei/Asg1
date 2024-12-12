@@ -7,10 +7,10 @@ class OtpVerificationDialog extends StatefulWidget {
   final VoidCallback onBack;
 
   const OtpVerificationDialog({
-    Key? key,
+    super.key,
     required this.onOtpVerified,
     required this.onBack,
-  }) : super(key: key);
+  });
 
   @override
   State<OtpVerificationDialog> createState() => _OtpVerificationDialogState();

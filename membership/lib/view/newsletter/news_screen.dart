@@ -31,7 +31,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
     Colors.blue[400]!,
     Colors.blue[600]!,
   ];
-  TextEditingController newslettertxt = new TextEditingController();
+  TextEditingController newslettertxt = TextEditingController();
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 170, 193, 233),
+      backgroundColor: const Color.fromARGB(255, 170, 193, 233),
       appBar: AppBar(
         title: const Text("Newsletter"),
         backgroundColor: Colors.transparent,
@@ -77,8 +77,10 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
                           controller: newslettertxt,
                           keyboardType: TextInputType.text,
                           onChanged: (text) {
+                            setState(() {
+                              curpage = 1; // Reset to the first page
+                            });
                             loadNewsData();
-                            setState(() {});
                           },
                           decoration: InputDecoration(
                             focusedBorder: OutlineInputBorder(
@@ -341,12 +343,14 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
 
   void loadNewsData() {
     String newsletter = newslettertxt.text;
+
     String api =
         "${Myconfig.server}/mymemberlink/load_news.php?pageno=$curpage";
     if (newsletter.isNotEmpty) {
       api += "&search=$newsletter";
     }
     http.get(Uri.parse(api)).then((response) {
+      log(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {
@@ -376,9 +380,9 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
             borderRadius: BorderRadius.circular(16),
           ),
           title: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 27, 171, 233),
+              color: const Color.fromARGB(255, 27, 171, 233),
               borderRadius: BorderRadius.circular(
                   8), // Rounded corners for title container
             ),
@@ -394,7 +398,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
           content: SingleChildScrollView(
             child: Text(
               newsList[index].newsDetails.toString(),
-              style: TextStyle(fontSize: 16, color: Colors.black87),
+              style: const TextStyle(fontSize: 16, color: Colors.black87),
               textAlign: TextAlign.justify,
             ),
           ),
@@ -432,7 +436,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             ElevatedButton(
@@ -458,7 +462,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
             ),
           ],
           backgroundColor: Colors.white,
-          contentPadding: EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(16),
           elevation: 5,
         );
       },

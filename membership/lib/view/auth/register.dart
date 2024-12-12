@@ -16,11 +16,11 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
-  TextEditingController usernametxt = new TextEditingController();
-  TextEditingController emailtxt = new TextEditingController();
-  TextEditingController passtxt = new TextEditingController();
-  TextEditingController phonetxt = new TextEditingController();
-  TextEditingController passRepeattxt = new TextEditingController();
+  TextEditingController usernametxt = TextEditingController();
+  TextEditingController emailtxt = TextEditingController();
+  TextEditingController passtxt = TextEditingController();
+  TextEditingController phonetxt = TextEditingController();
+  TextEditingController passRepeattxt = TextEditingController();
   bool _obscureText = true;
   bool _obscureText2 = true;
   bool emailissuccess = false;
@@ -57,6 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(

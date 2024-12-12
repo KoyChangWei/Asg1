@@ -4,6 +4,8 @@ import 'drawer/myDrawer.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'product/product._screen.dart';
+
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
 
@@ -58,7 +60,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 114, 104, 104),
+      backgroundColor: const Color.fromARGB(255, 114, 104, 104),
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white, // Set your desired color here
@@ -191,7 +193,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                   ),
                                 ],
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
                                 icon: const FaIcon(
                                   FontAwesomeIcons.chevronRight,
@@ -205,8 +207,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                NewsLetterScreen()),
+                                                const NewsLetterScreen()),
                                       );
+                                      break;
+                                    case 'Products':
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (content) =>
+                                                  const ProductScreen()));
+                                      break;
                                   }
                                 },
                               ),

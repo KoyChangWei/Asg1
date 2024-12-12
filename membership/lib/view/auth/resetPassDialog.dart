@@ -9,10 +9,10 @@ class ResetPasswordDialog extends StatefulWidget {
   final Function(BuildContext) onPasswordReset;
 
   const ResetPasswordDialog({
-    Key? key,
+    super.key,
     required this.email,
     required this.onPasswordReset,
-  }) : super(key: key);
+  });
 
   @override
   State<ResetPasswordDialog> createState() => _ResetPasswordDialogState();

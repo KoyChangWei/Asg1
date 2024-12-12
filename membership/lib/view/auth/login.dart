@@ -19,8 +19,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
-  TextEditingController emailtxt = new TextEditingController();
-  TextEditingController passtxt = new TextEditingController();
+  TextEditingController emailtxt = TextEditingController();
+  TextEditingController passtxt = TextEditingController();
   bool rememberMe = false;
   bool _obscureText = true;
   bool emailCheck = false;
@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -62,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(

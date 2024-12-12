@@ -195,7 +195,7 @@ class _EditNewsState extends State<EditNewsScreen> {
         builder: (context) {
           return AlertDialog(
             title: Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(8),
