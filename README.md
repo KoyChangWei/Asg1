@@ -38,5 +38,33 @@ This project includes a **splash screen**, login, and registration screens, inte
 ![OTP Entry](https://github.com/user-attachments/assets/8ef346cc-8e21-4cf9-8ccf-3e4ec2424851)
 
 ---
+### Password Reset - OTP Entry
+![OTP Entry](https://github.com/user-attachments/assets/8ef346cc-8e21-4cf9-8ccf-3e4ec2424851)
+
+---
+### Main Dashboard
+![image](https://github.com/user-attachments/assets/c4d0e3e8-c97d-4964-9d0e-1f0383ca943d)
+
+---
+### Drawer
+![image](https://github.com/user-attachments/assets/323e4f15-9715-46cc-9535-9e40279e46ca)
+
+---
+### Newsletter Screen
+![image](https://github.com/user-attachments/assets/840b5285-f781-4879-bcc5-bbde6dacf8d8)
+
+---
+### Add Newsletter Screen 
+![image](https://github.com/user-attachments/assets/8c934a6c-2f3e-4fe5-8b68-a4c637075a2e)
+
+---
+### Edit and Delete
+![image](https://github.com/user-attachments/assets/23a99f98-98ab-4dcb-b182-e71650d6dc5a)
+![image](https://github.com/user-attachments/assets/a28d9a2e-39f1-4fa3-99ea-480cb10d8839)
+![image](https://github.com/user-attachments/assets/acab06d9-9d3b-4d39-96df-7d1ff0ddd05f)
+
+---
+### Search newsletter
+![image](https://github.com/user-attachments/assets/237007fc-7c79-48e3-8cdc-03c94ad42d3c)
 
 We hope you enjoy exploring our project! Feel free to contribute or suggest improvements.
