@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:membership/view/product/cart_screen.dart';
 import '../../config/Myconfig.dart';
 import '../../model/product.dart';
@@ -127,12 +129,50 @@ class _ProductScreenState extends State<ProductScreen> {
             height: screenHeight * 0.75,
             child: productsList.isEmpty
                 ? Center(
-                    child: Text(
-                      status,
-                      style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 50),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.orange, width: 2),
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 500,
+                            height: 300,
+                            child: Lottie.asset(
+                              "assets/product.json",
+                              repeat: true,
+                            ),
+                          ),
+                          LoadingAnimationWidget.discreteCircle(
+                            color: Colors.blue,
+                            size: 30,
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "No Data....",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          TextButton(
+                            onPressed: loadProductsData,
+                            child: const Text(
+                              "Press to reload the product data",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 : Column(
@@ -194,8 +234,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       const SizedBox(height: 5),
                       Expanded(
                         child: GridView.count(
-                          childAspectRatio:
-                              0.4, // Adjust for better card proportions
+                          childAspectRatio: 0.5,
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
@@ -678,7 +717,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     .toString())),
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
-                              Divider(
+                              const Divider(
                                 thickness: 5,
                                 color: Colors.blue,
                               ),
