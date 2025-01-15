@@ -1,22 +1,21 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
+import 'package:membership/model/user.dart';
 import 'package:membership/view/product/cart_screen.dart';
 import '../../config/Myconfig.dart';
 import '../../model/product.dart';
 import '../drawer/myDrawer.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  final User user;
+  const ProductScreen({super.key, required this.user});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -106,7 +105,11 @@ class _ProductScreenState extends State<ProductScreen> {
                       onPressed: () {
                         setState(() {
                           selectedIndex = index; // Update the selected index
+                          if (categories[selectedIndex] != "All") {
+                            curpage = 1;
+                          }
                         });
+
                         loadProductsData();
                       },
                       child: Text(
@@ -183,48 +186,46 @@ class _ProductScreenState extends State<ProductScreen> {
                             horizontal: 10), // Add horizontal padding
 
                         // TextField for input
-                        child: Expanded(
-                          child: TextField(
-                            controller: producttxt,
-                            keyboardType: TextInputType.text,
-                            onChanged: (text) {
-                              setState(() {
-                                curpage = 1;
-                              });
-                              loadProductsData();
-                            },
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: const BorderSide(
-                                    color: Colors.orangeAccent, width: 2.0),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              prefixIcon: const Icon(
-                                Icons.search,
+                        child: TextField(
+                          controller: producttxt,
+                          keyboardType: TextInputType.text,
+                          onChanged: (text) {
+                            setState(() {
+                              curpage = 1;
+                            });
+                            loadProductsData();
+                          },
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(
+                                  color: Colors.orangeAccent, width: 2.0),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              color: Colors.orange,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: const Icon(
+                                Icons.cancel,
                                 color: Colors.orange,
                               ),
-                              suffixIcon: IconButton(
-                                icon: const Icon(
-                                  Icons.cancel,
-                                  color: Colors.orange,
-                                ),
-                                onPressed: () {
-                                  producttxt.clear();
-                                  loadProductsData();
-                                },
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(
-                                    color: Colors.grey, width: 1.0),
-                              ),
-                              labelText: 'Search',
-                              labelStyle: const TextStyle(color: Colors.black),
+                              onPressed: () {
+                                producttxt.clear();
+                                loadProductsData();
+                              },
                             ),
-                            style: const TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(
+                                  color: Colors.grey, width: 1.0),
+                            ),
+                            labelText: 'Search',
+                            labelStyle: const TextStyle(color: Colors.black),
                           ),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
                       Container(
@@ -456,7 +457,7 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(user: widget.user),
     );
   }
 
@@ -472,13 +473,11 @@ class _ProductScreenState extends State<ProductScreen> {
   void loadProductsData() {
     String category = categories[selectedIndex];
     String search = producttxt.text;
-    print(search);
-    print("search");
     http
         .get(Uri.parse(
             "${Myconfig.server}/mymemberlink/load_product.php?pageno=$curpage&category=$category&search=$search"))
         .then((response) {
-      // log(response.body.toString());
+      //  log(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {

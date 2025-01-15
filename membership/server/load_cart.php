@@ -4,7 +4,6 @@ include_once("dbconnect.php");
 
 $sqlloadproduct = "SELECT * FROM `cart` ORDER BY `product_startDate` DESC";
 
-
 $result = $conn->query($sqlloadproduct);
 
 if ($result->num_rows > 0) {

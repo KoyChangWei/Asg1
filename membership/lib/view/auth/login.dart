@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:membership/config/Myconfig.dart';
+import 'package:membership/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../homePage.dart';
 import 'forgotPass.dart';
@@ -25,9 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   bool emailCheck = false;
   bool passCheck = false;
- 
 
-  
   Future googleSignIn() async {
     try {
       final user = await GoogleSignInService.login();
@@ -45,10 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Image.network(user.photoUrl.toString()),
           ],
         )));
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen()),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const HomePageScreen(user: user)),
+        // );
       }
     } catch (exception) {
       log(exception.toString());
@@ -61,7 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     loadPref();
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +253,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   setState(() {});
                                 });
                               },
-                              activeColor: const Color.fromRGBO(27, 255, 255, 1),
+                              activeColor:
+                                  const Color.fromRGBO(27, 255, 255, 1),
                             ),
                           ],
                         ),
@@ -283,12 +281,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 10,
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (content) => const ForgotPasswordScreen()));
-
+                                    builder: (content) =>
+                                        const ForgotPasswordScreen()));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 200),
@@ -376,7 +374,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (content) => const RegisterScreen()));
+                                      builder: (content) =>
+                                          const RegisterScreen()));
                             },
                             child: const Row(
                               children: [
@@ -423,23 +422,27 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = passtxt.text;
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-            "Please fill in  your detail!"),
+        content: Text("Please fill in  your detail!"),
         backgroundColor: Colors.red,
       ));
       return;
     }
     http.post(Uri.parse("${Myconfig.server}/mymemberlink/logindb.php"),
         body: {"email": email, "password": password}).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {
+          User user = User.fromJson(data['data']);
+          print(user.email);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Login Success"),
             backgroundColor: Colors.green,
           ));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (content) => const HomePageScreen()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (content) => HomePageScreen(user: user)));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Login Failed"),
@@ -464,6 +467,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       prefs.setString("email", email);
       prefs.setString("password", password);
+      prefs.setBool("RememberMe", value);
       emailtxt.text = "";
       passtxt.text = "";
       setState(() {});
@@ -477,9 +481,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> loadPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    emailtxt.text = prefs.getString("email")!;
-    passtxt.text = prefs.getString("password")!;
-    rememberMe = prefs.getBool("RememberMe")!;
+    rememberMe = prefs.getBool("RememberMe") ?? false;
+    if (rememberMe) {
+      emailtxt.text = prefs.getString("email") ?? "";
+      passtxt.text = prefs.getString("password") ?? "";
+    } else {
+      emailtxt.clear();
+      passtxt.clear();
+    }
     setState(() {});
   }
 }

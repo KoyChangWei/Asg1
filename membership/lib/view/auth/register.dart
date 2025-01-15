@@ -47,10 +47,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Image.network(user.photoUrl.toString()),
           ],
         )));
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen()),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => HomePageScreen()),
+        // );
       }
     } catch (exception) {
       log(exception.toString());

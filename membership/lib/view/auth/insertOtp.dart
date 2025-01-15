@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:pinput/pinput.dart';
 class OtpVerificationDialog extends StatefulWidget {

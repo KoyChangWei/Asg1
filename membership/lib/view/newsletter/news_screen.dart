@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:membership/model/user.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../config/Myconfig.dart';
@@ -12,7 +13,8 @@ import 'add_news.dart';
 import 'edit_news.dart';
 
 class NewsLetterScreen extends StatefulWidget {
-  const NewsLetterScreen({super.key});
+  final User user;
+  const NewsLetterScreen({super.key, required this.user});
 
   @override
   State<NewsLetterScreen> createState() => _NewsLetterScreenState();
@@ -328,7 +330,7 @@ class _NewsLetterScreenState extends State<NewsLetterScreen> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(user: widget.user),
     );
   }
 

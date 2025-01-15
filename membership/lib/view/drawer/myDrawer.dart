@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:membership/model/user.dart';
+import 'package:membership/view/membership/MembershipScreen.dart';
 
 import '../auth/login.dart';
 import '../homePage.dart';
 import '../newsletter/news_screen.dart';
 import '../product/product._screen.dart';
+import '../payment/payment_list_screen.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+final User user;
+  const MyDrawer({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(padding: const EdgeInsets.all(0.0), children: <Widget>[
         UserAccountsDrawerHeader(
-          accountName: const Text(
-            'Song Yu Qi',
+          accountName: Text(
+            user.username!,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          accountEmail: const Text(
-            'yuqi@gmail.com',
+          accountEmail: Text(
+            user.email!,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
           currentAccountPicture: const CircleAvatar(
@@ -36,7 +40,7 @@ class MyDrawer extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (content) => const HomePageScreen()));
+                    builder: (content) =>  HomePageScreen(user: user)));
           },
         ),
         const Divider(),
@@ -47,7 +51,7 @@ class MyDrawer extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (content) => const NewsLetterScreen()));
+                    builder: (content) => NewsLetterScreen(user: user)));
           },
         ),
         const ListTile(
@@ -57,12 +61,25 @@ class MyDrawer extends StatelessWidget {
         ListTile(
           title: const Text('Members'),
           leading: const Icon(Icons.group),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (content) =>  MembershipScreen(user: user)),
+            );
+          },
         ),
         ListTile(
           title: const Text('Payments'),
           leading: const Icon(Icons.payment),
-          onLongPress: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (content) => PaymentListScreen(user: user),
+              ),
+            );
+          },
         ),
         ListTile(
           title: const Text('Products'),
@@ -71,13 +88,15 @@ class MyDrawer extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (content) => const ProductScreen()));
+                    builder: (content) => ProductScreen(user: user)));
           },
         ),
         ListTile(
           title: const Text('Vetting'),
           leading: const Icon(Icons.verified),
-          onLongPress: () {},
+          onTap: () {
+          
+          },
         ),
         const Divider(),
         ListTile(

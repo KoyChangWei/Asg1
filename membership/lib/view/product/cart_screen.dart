@@ -225,7 +225,7 @@ class _CartScreenState extends State<CartScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 15,
                                       ),
 
@@ -235,7 +235,7 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                       Text(
                                         "Total Price:  RM ${calculateTotalPrice(index).toStringAsFixed(2)}",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,
                                             color: Colors.black87),

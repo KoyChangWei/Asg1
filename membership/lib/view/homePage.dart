@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:membership/model/user.dart';
 import 'package:membership/view/newsletter/news_screen.dart';
 import 'drawer/myDrawer.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'product/product._screen.dart';
 
 class HomePageScreen extends StatefulWidget {
-  const HomePageScreen({super.key});
+  final User user;
+  const HomePageScreen({super.key, required this.user});
 
   @override
   State<HomePageScreen> createState() => _HomePageScreenState();
@@ -75,7 +77,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(user: widget.user),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -207,7 +209,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const NewsLetterScreen()),
+                                                NewsLetterScreen(user: widget.user)),
                                       );
                                       break;
                                     case 'Products':
@@ -215,7 +217,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (content) =>
-                                                  const ProductScreen()));
+                                                  ProductScreen(user:widget.user)));
                                       break;
                                   }
                                 },
