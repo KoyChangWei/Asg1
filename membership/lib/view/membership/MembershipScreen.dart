@@ -27,6 +27,32 @@ class _MembershipScreenState extends State<MembershipScreen>
   final df = DateFormat('dd-MM-yyyy');
   String _selectedScreen = "Available Plans";
   List<String> sreenListPlan = ["Available Plans", "My Subscriptions"];
+  final List<List<Color>> purpleGradients = [
+    [
+      Colors.purple.shade300,
+      Colors.deepPurple.shade200,
+      Colors.purple.shade100,
+      Colors.purpleAccent.shade100,
+    ],
+    [
+      Colors.deepPurple.shade400,
+      Colors.purple.shade300,
+      Colors.deepPurple.shade200,
+      Colors.purpleAccent.shade200,
+    ],
+    [
+      Colors.purple.shade500,
+      Colors.deepPurple.shade300,
+      Colors.purple.shade200,
+      Colors.deepPurple.shade100,
+    ],
+    [
+      Colors.deepPurple.shade500,
+      Colors.purple.shade400,
+      Colors.deepPurple.shade200,
+      Colors.purple.shade100,
+    ],
+  ];
 
   @override
   void initState() {
@@ -184,12 +210,10 @@ class _MembershipScreenState extends State<MembershipScreen>
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           gradient: LinearGradient(
-                            colors: [
-                              Colors.blue.withOpacity(0.05),
-                              Colors.white,
-                            ],
+                            colors: purpleGradients[index % purpleGradients.length],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
+                            stops: const [0.1, 0.4, 0.7, 0.9],
                           ),
                         ),
                         child: Column(
@@ -325,12 +349,10 @@ class _MembershipScreenState extends State<MembershipScreen>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
-                        colors: [
-                          Colors.blue.withOpacity(0.05),
-                          Colors.white,
-                        ],
+                        colors: purpleGradients[index % purpleGradients.length],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
+                        stops: const [0.1, 0.4, 0.7, 0.9],
                       ),
                     ),
                     child: Column(

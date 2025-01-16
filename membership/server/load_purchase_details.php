@@ -7,8 +7,18 @@ if (!isset($_POST['user_id'])) {
 }
 
 $user_id = $_POST['user_id'];
+$start_date = $_POST['start_date'];
+$end_date = $_POST['end_date'];
 
 $sql = "SELECT * FROM tbl_purchase WHERE user_id = '$user_id'";
+
+if (!empty($start_date) && !empty($end_date)) {
+    $sql .= " AND DATE(purchase_date) BETWEEN STR_TO_DATE('$start_date', '%d-%m-%Y') 
+              AND STR_TO_DATE('$end_date', '%d-%m-%Y')";
+}
+
+$sql .= " ORDER BY purchase_id DESC";
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

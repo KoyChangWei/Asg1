@@ -21,6 +21,11 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
   List<PurchaseDetail> purchaseList = [];
   final df = DateFormat('dd-MM-yyyy');
   final currencyFormat = NumberFormat("#,##0.00", "en_US");
+  DateTime? selectedDate;
+  DateTime? startDate;
+  DateTime? endDate;
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
 
   @override
   void initState() {
@@ -60,161 +65,308 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
             ],
           ),
         ),
-        child: purchaseList.isEmpty
-            ? Center(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                      ),
-                    ],
+        child: Column(
+          children: [
+           
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
                   ),
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        "No payment records found",
+                      const Icon(Icons.filter_list, color: Colors.blue),
+                      const SizedBox(width: 8),
+                      const Text(
+                        "Filter by Date",
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const Spacer(),
+                      if (startDate != null || endDate != null)
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              startDate = null;
+                              endDate = null;
+                              _startDateController.clear();
+                              _endDateController.clear();
+                            });
+                            loadPurchaseHistory();
+                          },
+                          child: const Text("Clear"),
+                        ),
                     ],
                   ),
-                ),
-              )
-            : ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: purchaseList.length,
-                itemBuilder: (context, index) {
-                  final purchase = purchaseList[index];
-                  final purchaseDate = df.format(DateTime.parse(purchase.purchaseDate!));
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: startDate ?? DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime.now(),
+                            );
 
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: purchase.paymentStatus?.toLowerCase() == "paid" 
-                              ? [
-                                  Colors.green.shade300,
-                                  Colors.green.shade100,
-                                ]
-                              : [
-                                  Colors.red.shade300,
-                                  Colors.red.shade100,
-                                ],
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        onTap: () => loadMembershipStatusDialog(purchase),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      purchase.membershipName ?? "Unknown",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
+                            if (pickedDate != null) {
+                              setState(() {
+                                startDate = pickedDate;
+                                _startDateController.text = df.format(pickedDate);
+                              });
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.calendar_today, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  startDate != null 
+                                      ? df.format(startDate!) 
+                                      : "Start Date",
+                                  style: TextStyle(
+                                    color: startDate != null 
+                                        ? Colors.black 
+                                        : Colors.grey.shade600,
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: purchase.paymentStatus?.toLowerCase() == "paid"
-                                          ? Colors.green.withOpacity(0.2)
-                                          : Colors.red.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      purchase.paymentStatus ?? "Unknown",
-                                      style: TextStyle(
-                                        color: purchase.paymentStatus?.toLowerCase() == "paid"
-                                            ? Colors.green[800]
-                                            : Colors.red[800],
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              dateInfo("Purchase Date", purchaseDate),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Amount Paid:",
-                                    style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Text(
-                                    "RM ${currencyFormat.format(double.parse(purchase.paymentAmount ?? '0'))}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Divider(height: 24, color: Colors.white,thickness:3,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextButton.icon(
-                                    icon: Icon(
-                                      Icons.receipt_long,
-                                      color: Colors.blue[700],
-                                    ),
-                                    label: Text(
-                                      "View Details",
-                                      style: TextStyle(color: Colors.blue[700]),
-                                    ),
-                                    onPressed: () => loadMembershipStatusDialog(purchase),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text("to"),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: endDate ?? DateTime.now(),
+                              firstDate: startDate ?? DateTime(2000),
+                              lastDate: DateTime.now(),
+                            );
+
+                            if (pickedDate != null) {
+                              setState(() {
+                                endDate = pickedDate;
+                                _endDateController.text = df.format(pickedDate);
+                              });
+                              loadPurchaseHistory();
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.calendar_today, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  endDate != null 
+                                      ? df.format(endDate!) 
+                                      : "End Date",
+                                  style: TextStyle(
+                                    color: endDate != null 
+                                        ? Colors.black 
+                                        : Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
+            ),
+            // Scrollable Payment History
+            Expanded(
+              child: purchaseList.isEmpty
+                  ? Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: const Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              "No payment records found",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: purchaseList.length,
+                      itemBuilder: (context, index) {
+                        final purchase = purchaseList[index];
+                        final purchaseDate = df.format(DateTime.parse(purchase.purchaseDate!));
+
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: purchase.paymentStatus?.toLowerCase() == "paid" 
+                                    ? [
+                                        Colors.green.shade300,
+                                        Colors.green.shade100,
+                                      ]
+                                    : [
+                                        Colors.red.shade300,
+                                        Colors.red.shade100,
+                                      ],
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(15),
+                              onTap: () => loadMembershipStatusDialog(purchase),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            purchase.membershipName ?? "Unknown",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: purchase.paymentStatus?.toLowerCase() == "paid"
+                                                ? Colors.green.withOpacity(0.2)
+                                                : Colors.red.withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Text(
+                                            purchase.paymentStatus ?? "Unknown",
+                                            style: TextStyle(
+                                              color: purchase.paymentStatus?.toLowerCase() == "paid"
+                                                  ? Colors.green[800]
+                                                  : Colors.red[800],
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    dateInfo("Purchase Date", purchaseDate),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Amount Paid:",
+                                          style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          "RM ${currencyFormat.format(double.parse(purchase.paymentAmount ?? '0'))}",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(height: 24, color: Colors.white,thickness:3,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton.icon(
+                                          icon: Icon(
+                                            Icons.receipt_long,
+                                            color: Colors.blue[700],
+                                          ),
+                                          label: Text(
+                                            "View Details",
+                                            style: TextStyle(color: Colors.blue[700]),
+                                          ),
+                                          onPressed: () => loadMembershipStatusDialog(purchase),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -568,6 +720,8 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
         Uri.parse("${Myconfig.server}/mymemberlink/load_purchase_details.php"),
         body: {
           "user_id": widget.user.memberId,
+          "start_date": startDate != null ? df.format(startDate!) : "",
+          "end_date": endDate != null ? df.format(endDate!) : "",
         },
       );
 
@@ -617,3 +771,4 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
   }
 
 }
+
